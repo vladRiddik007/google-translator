@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { Header } from "./components/header";
 
 import { googleTranslate } from "./utils/googleTranlate";
+import { History } from "./components/history";
+import { InputFields } from "./components/input-fields";
+import styled from "styled-components";
 
 const App = () => {
   const localHistory = localStorage.history;
@@ -39,37 +43,43 @@ const App = () => {
   };
 
   return (
-    <div style={{}}>
-      <input
+    <>
+      <Header title="translator 2020" />
+      <AppBodyStyled>
+        <InputFields
+          question={question}
+          answer={answer}
+          onChange={setQuestion}
+          onClick={changeHandler}
+        />
+        {/* <input
         type="text"
         value={question}
         onChange={(event) => setQuestion(event.target.value)}
         placeholder="Enter text"
       />
-      <input type="text" value={answer} readOnly />
+      <button onClick={changeHandler}>Go!</button>
+      <input type="text" value={answer} readOnly /> */}
 
-      <select
-        value={language}
-        onChange={(event) => setLanguage(event.target.value)}
-      >
-        {languageCodes.map((lang) => (
-          <option key={lang.language} value={lang.language}>
-            {lang.name}
-          </option>
-        ))}
-      </select>
-      <button onClick={changeHandler}>lang</button>
-      <div className="history">
-        <ol>
-          {history.map((item, i) => (
-            <li key={i}>
-              {item.question} - {item.transQuestion}
-            </li>
+        <select
+          value={language}
+          onChange={(event) => setLanguage(event.target.value)}
+        >
+          {languageCodes.map((lang) => (
+            <option key={lang.language} value={lang.language}>
+              {lang.name}
+            </option>
           ))}
-        </ol>
-      </div>
-    </div>
+        </select>
+        <History history={history} />
+      </AppBodyStyled>
+    </>
   );
 };
 
 export default App;
+
+const AppBodyStyled = styled.body`
+  display: flex;
+  align-items: flex-start;
+`;
