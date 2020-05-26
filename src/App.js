@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import styled from "styled-components";
 import { Header } from "./components/header";
-
-import { googleTranslate } from "./utils/googleTranlate";
+import { getSupportedLanguages, translate } from "./translateServices";
 import { History } from "./components/history";
 import { InputFields } from "./components/input-fields";
-import styled from "styled-components";
+import * as actions from "./redux/translation/actions";
+import { Select } from "./components/select";
 
-const App = () => {
+const App = ({ answer, setTranslate }) => {
   const localHistory = localStorage.history;
   const [languageCodes, setLanguageCodes] = useState([]);
   const [language, setLanguage] = useState("en");
   const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
   const [history, setHistory] = useState(
     localHistory ? JSON.parse(localHistory) : []
   );
 
   useEffect(() => {
-    googleTranslate.getSupportedLanguages("ru", function (err, languageCodes) {
-      getLanguageCodes(languageCodes);
-    });
+    getSupportedLanguages().then((res) => getLanguageCodes(res));
     const getLanguageCodes = (languageCodes) => {
       setLanguageCodes(languageCodes);
     };
@@ -28,7 +27,6 @@ const App = () => {
   const changeHandler = () => {
     const translating = (transQuestion) => {
       if (question !== transQuestion) {
-        setAnswer(transQuestion);
         setHistory((prevHistory) => {
           const res = [...prevHistory, { question, transQuestion }];
           localStorage.setItem("history", JSON.stringify(res));
@@ -37,9 +35,8 @@ const App = () => {
       }
     };
 
-    googleTranslate.translate(question, language, function (err, translation) {
-      translating(translation.translatedText);
-    });
+    setTranslate({ question, language });
+    translate({question, language}).then((res) => translating(res));
   };
 
   return (
@@ -52,34 +49,24 @@ const App = () => {
           onChange={setQuestion}
           onClick={changeHandler}
         />
-        {/* <input
-        type="text"
-        value={question}
-        onChange={(event) => setQuestion(event.target.value)}
-        placeholder="Enter text"
-      />
-      <button onClick={changeHandler}>Go!</button>
-      <input type="text" value={answer} readOnly /> */}
-
-        <select
-          value={language}
-          onChange={(event) => setLanguage(event.target.value)}
-        >
-          {languageCodes.map((lang) => (
-            <option key={lang.language} value={lang.language}>
-              {lang.name}
-            </option>
-          ))}
-        </select>
+        <Select
+          language={language}
+          onChange={setLanguage}
+          languageCodes={languageCodes}
+        />
         <History history={history} />
       </AppBodyStyled>
     </>
   );
 };
 
-export default App;
-
-const AppBodyStyled = styled.body`
+const AppBodyStyled = styled.div`
   display: flex;
   align-items: flex-start;
 `;
+
+const mapStateToProps = (state) => ({
+  answer: state.translation.answer,
+});
+
+export default connect(mapStateToProps, actions)(App);

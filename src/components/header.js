@@ -1,13 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-export const Header = ({ title, backgroundColor }) => {
-  return (
-    <HeaderStyled backgroundColor={backgroundColor}>
-      <h1>{title}</h1>
-    </HeaderStyled>
-  );
-};
+export const Header = ({ title, backgroundColor }) => (
+  <HeaderStyled backgroundColor={backgroundColor}>
+    <h1>{title}</h1>
+  </HeaderStyled>
+);
 
 const HeaderStyled = styled.header`
   height: 100px;
