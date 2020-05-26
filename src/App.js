@@ -4,11 +4,11 @@ import styled from "styled-components";
 import { Header } from "./components/header";
 import { getSupportedLanguages, translate } from "./translateServices";
 import { History } from "./components/history";
-import { InputFields } from "./components/input-fields";
+import InputFields from "./components/input-fields";
 import * as actions from "./redux/translation/actions";
 import { Select } from "./components/select";
 
-const App = ({ answer, setTranslate }) => {
+const App = ({ setTranslate }) => {
   const localHistory = localStorage.history;
   const [languageCodes, setLanguageCodes] = useState([]);
   const [language, setLanguage] = useState("en");
@@ -45,7 +45,6 @@ const App = ({ answer, setTranslate }) => {
       <AppBodyStyled>
         <InputFields
           question={question}
-          answer={answer}
           onChange={setQuestion}
           onClick={changeHandler}
         />
@@ -65,8 +64,8 @@ const AppBodyStyled = styled.div`
   align-items: flex-start;
 `;
 
-const mapStateToProps = (state) => ({
-  answer: state.translation.answer,
-});
+// const mapStateToProps = (state) => ({
+//   answer: state.translation.answer,
+// });
 
-export default connect(mapStateToProps, actions)(App);
+export default connect(null, actions)(App);

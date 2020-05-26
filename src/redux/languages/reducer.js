@@ -17,11 +17,7 @@ export const translationReducer = (state = initialState, action) => {
       return { ...state, error: true, loading: false };
 
     case types.SET_LANGUAGE:
-      return { ...state, loading: true };
-    case types.SET_LANGUAGE_SUCCESS:
-      return { ...state, language: action.payload, loading: false };
-    case types.SET_LANGUAGE_ERROR:
-      return { ...state, error: true, loading: false };
+      return { ...state, language: action.payload };
 
     default: {
       return {

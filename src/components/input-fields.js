@@ -1,7 +1,8 @@
 import React from "react";
+import { connect } from "react-redux";
 import styled from "styled-components";
 
-export const InputFields = ({ question, answer, onChange, onClick }) => {
+const InputFields = ({ question, answer, onChange, onClick }) => {
   return (
     <InputFieldsStyled>
       <input
@@ -15,6 +16,12 @@ export const InputFields = ({ question, answer, onChange, onClick }) => {
     </InputFieldsStyled>
   );
 };
+
+const mapStateToProps = (state) => ({
+  answer: state.translation.answer,
+});
+
+export default connect(mapStateToProps, null)(InputFields);
 
 const InputFieldsStyled = styled.section`
 
